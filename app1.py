@@ -16,17 +16,18 @@ from sklearn.metrics import (
 # Title
 st.title("Random Forest Classification")
 
-# Upload File
+# Upload CSV File
 uploaded_file = st.file_uploader(
-    "Upload Excel File",
-    type=["xlsx"]
+    "Upload CSV File",
+    type=["csv"]
 )
 
 if uploaded_file is not None:
 
-    # Read Excel File
-    data = pd.read_excel(uploaded_file)
+    # Read CSV File
+    data = pd.read_csv(uploaded_file)
 
+    # Display Dataset
     st.subheader("Dataset")
     st.write(data.head())
 
@@ -36,11 +37,13 @@ if uploaded_file is not None:
     # Remove Duplicate Values
     data = data.drop_duplicates()
 
+    # Dataset Shape
     st.subheader("Dataset Shape")
     st.write(data.shape)
 
+    # Column Names
     st.subheader("Column Names")
-    st.write(data.columns)
+    st.write(list(data.columns))
 
     # Select Target Column
     target_column = st.selectbox(
@@ -49,11 +52,11 @@ if uploaded_file is not None:
     )
 
     # Encode Categorical Columns
-    label_encoder = LabelEncoder()
+    encoder = LabelEncoder()
 
     for column in data.columns:
         if data[column].dtype == 'object':
-            data[column] = label_encoder.fit_transform(data[column])
+            data[column] = encoder.fit_transform(data[column])
 
     # Features and Target
     X = data.drop(target_column, axis=1)
@@ -67,7 +70,7 @@ if uploaded_file is not None:
         random_state=42
     )
 
-    # Model
+    # Random Forest Model
     model = RandomForestClassifier(
         n_estimators=100,
         random_state=42
@@ -82,8 +85,8 @@ if uploaded_file is not None:
     # Accuracy
     accuracy = accuracy_score(y_test, y_pred)
 
-    st.subheader("Accuracy")
-    st.write(f"Accuracy Score : {accuracy}")
+    st.subheader("Accuracy Score")
+    st.write(accuracy)
 
     # Classification Report
     st.subheader("Classification Report")
@@ -139,3 +142,4 @@ if uploaded_file is not None:
     ax2.set_title("Feature Importance")
 
     st.pyplot(fig2)
+    
