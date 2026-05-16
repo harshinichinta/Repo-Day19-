@@ -176,16 +176,24 @@ if uploaded_file is not None:
     st.pyplot(fig3)
 
     # Correlation Heatmap
-    st.subheader("Correlation Heatmap")
 
-    fig4, ax4 = plt.subplots(figsize=(12,8))
+st.subheader("Correlation Heatmap")
 
-    sns.heatmap(
-        data.corr(),
-        cmap="coolwarm",
-        ax=ax4
-    )
+# Select only numeric columns
+numeric_data = df.select_dtypes(include=['number'])
 
-    ax4.set_title("Correlation Heatmap")
+# Create correlation matrix
+corr_matrix = numeric_data.corr()
 
-    st.pyplot(fig4)
+# Plot Heatmap
+fig3, ax3 = plt.subplots(figsize=(12, 8))
+
+sns.heatmap(
+    corr_matrix,
+    cmap='coolwarm',
+    ax=ax3
+)
+
+ax3.set_title("Correlation Heatmap")
+
+st.pyplot(fig3)
